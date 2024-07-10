@@ -1,0 +1,106 @@
+---
+title: "ML - Assignment"
+author: "swetha"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+```
+
+
+```{r}
+library(ISLR)
+```
+```{r}
+?Auto
+```
+```{r}
+auto=Auto
+```
+```{r}
+dim(auto)
+names(auto)
+summary(auto)
+str(auto)
+View(auto)
+```
+# 1.	This exercise involves the Auto data set studied in the lab. Make sure that the missing values have been removed from the data.
+# (a) Which of the predictors are quantitative, and which are qualitative?
+
+```{r}
+str(auto)
+```
+
+###Answer:
+
+####Quantitative predictors: mpg, cylinders, displacement, horsepower, weight, acceleration, year
+
+####Qualitative predictors: origin, name
+
+
+# (b) What is the range of each quantitative predictor? You can answer this using the range() function. 
+```{r}
+range_auto <- sapply(auto[, c("mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year")], range)
+
+range_auto
+```
+# (c) What is the mean and standard deviation of each quantitative predictor?
+```{r}
+quantitative_predictors <- auto[, c("mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year")]
+
+mean_sd_values <- sapply(quantitative_predictors, function(x) c(mean = mean(x, na.rm = TRUE), sd = sd(x, na.rm = TRUE)))
+
+mean_sd_df <- data.frame(t(mean_sd_values))
+
+colnames(mean_sd_df) <- c("Mean", "SD")
+
+print(mean_sd_df)
+```
+# (d)	 Now remove the 10th through 85th observations. What is the range, mean, and standard deviation of each predictor in the subset of the data that remains? 
+```{r}
+auto_subset <- auto[-(10:85), ]
+
+range_auto_subset <- sapply(auto_subset[, c("mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year")], range)
+print("Range of subset:")
+print(range_auto_subset)
+
+mean_sd_values_subset <- sapply(auto_subset[, c("mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year")], function(x) c(mean = mean(x, na.rm = TRUE), sd = sd(x, na.rm = TRUE)))
+
+mean_sd_df_subset <- data.frame(t(mean_sd_values_subset))
+colnames(mean_sd_df_subset) <- c("Mean", "SD")
+
+print("Mean and SD of subset:")
+print(mean_sd_df_subset)
+```
+# (e)	Using the full data set, investigate the predictors graphically, using scatterplots or other tools of your choice. Create some plots highlighting the relationships among the predictors. Comment on your findings.
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(auto, aes(x = horsepower, y = mpg)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + ggtitle("MPG vs Horsepower")
+ggplot(auto, aes(x = weight, y = mpg)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + ggtitle("MPG vs Weight")
+ggplot(auto, aes(x = displacement, y = mpg)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + ggtitle("MPG vs Displacement")
+ggplot(auto, aes(x = acceleration, y = mpg)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + ggtitle("MPG vs Acceleration")
+ggplot(auto, aes(x = year, y = mpg)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + ggtitle("MPG vs Year")
+ggplot(auto, aes(x = cylinders, y = mpg)) + geom_point() + geom_smooth(method = "lm", se = FALSE) + ggtitle("MPG vs Cylinders")
+```
+```{r}
+# (f) Suppose that we wish to predict gas mileage (mpg) on the basis of the other variables. Do your plots suggest that any of the other variables might be useful in predicting mpg? Justify your answer
+
+```
+###Answer:
+
+####Horsepower vs MPG: There is a noticeable negative linear relationship, suggesting that as horsepower increases, mpg tends to decrease.
+
+####Weight vs MPG: There is a strong negative linear relationship, indicating that heavier cars tend to have lower mpg.
+
+####Displacement vs MPG: Similar to weight, there is a negative linear relationship, implying that higher engine displacement correlates with lower mpg.
+
+####Acceleration vs MPG: While not as strong, there appears to be a slight positive trend, suggesting that faster acceleration might correlate with higher mpg.
+
+####Year vs MPG: There is a positive linear relationship, indicating that newer cars tend to have better mpg.
+
+####Cylinders vs MPG: There is a negative relationship, meaning cars with more cylinders tend to have lower mpg.
